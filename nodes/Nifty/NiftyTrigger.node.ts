@@ -5,7 +5,7 @@ import type { IDataObject, IHttpRequestMethods, ILoadOptionsFunctions, INodeExec
 const BASE_URL = 'https://openapi.niftypm.com/api/v3';
 // The credential the `authentication` option picks.
 function credentialOf(context: IPollFunctions | ILoadOptionsFunctions): string {
-	return context.getNodeParameter('authentication', 'oAuth2') === 'apiKey' ? 'niftyApi' : 'niftyOAuth2Api';
+	return context.getNodeParameter('authentication', 'apiKey') === 'oAuth2' ? 'niftyOAuth2Api' : 'niftyApi';
 }
 
 // Ids remembered for the current event and filter so that a task is delivered once; bounded, newest first. A poll reads one page, so at most
@@ -140,15 +140,15 @@ export class NiftyTrigger implements INodeType {
 				type: 'options',
 				options: [
 					{
-						name: 'OAuth2',
-						value: 'oAuth2',
-					},
-					{
 						name: 'API Key',
 						value: 'apiKey',
 					},
+					{
+						name: 'OAuth2',
+						value: 'oAuth2',
+					},
 				],
-				default: 'oAuth2',
+				default: 'apiKey',
 			},
 			{
 				displayName: 'Event',

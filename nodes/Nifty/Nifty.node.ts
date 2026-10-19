@@ -294,15 +294,15 @@ export class Nifty implements INodeType {
 				type: 'options',
 				options: [
 					{
-						name: 'OAuth2',
-						value: 'oAuth2',
-					},
-					{
 						name: 'API Key',
 						value: 'apiKey',
 					},
+					{
+						name: 'OAuth2',
+						value: 'oAuth2',
+					},
 				],
-				default: 'oAuth2',
+				default: 'apiKey',
 			},
 			{
 				displayName: 'Resource',

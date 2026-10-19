@@ -19,10 +19,10 @@ See the n8n [community nodes installation guide](https://docs.n8n.io/integration
 
 Both nodes have an **Authentication** option that picks one of two credentials:
 
-- **Nifty OAuth2 API** (default, for n8n Cloud): OAuth 2.0 authorization code with PKCE. Enter the client ID and
-  client secret of your Nifty OAuth app.
-- **Nifty API** (for self-hosted n8n): a personal access token (`nft_user_…`) created under
+- **Nifty API** (default): a personal access token (`nft_user_…`) created under
   **Settings > API Tokens** in Nifty, sent as `Authorization: Bearer <token>`.
+- **Nifty OAuth2 API** (for n8n Cloud): OAuth 2.0 authorization code with PKCE. Enter the client ID and
+  client secret of your Nifty OAuth app.
 
 The node calls the Nifty v3 API at `https://openapi.niftypm.com/api/v3`.
 See [developers.niftypm.com](https://developers.niftypm.com).

@@ -1,5 +1,8 @@
 name: Publish to npm
 
+# n8n requires community nodes to be published from GitHub Actions with npm provenance.
+# `npm run release` in CI (n8n-node release) lints, builds and runs `npm publish` with
+# RELEASE_MODE + provenance; a plain `npm publish` is refused by the prepublishOnly guard.
 on:
   release:
     types: [published]
@@ -15,10 +18,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24 # npm >= 11.5 for trusted publishing
           registry-url: https://registry.npmjs.org
       - run: npm install
-      - run: npm run build
-      - run: npm publish --provenance --access public
+      # NPM_TOKEN unset = npm trusted publishing (OIDC).
+      - run: npm run release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
