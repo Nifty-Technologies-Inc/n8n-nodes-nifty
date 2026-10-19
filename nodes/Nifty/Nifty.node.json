@@ -1,0 +1,20 @@
+{
+	"node": "@nifty-technologies/n8n-nodes-nifty.nifty",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": [
+		"Productivity"
+	],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://developers.niftypm.com"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://developers.niftypm.com"
+			}
+		]
+	}
+}
