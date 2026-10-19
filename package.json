@@ -1,6 +1,6 @@
 {
 	"name": "@nifty-technologies/n8n-nodes-nifty",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "n8n community node for Nifty: tasks, projects, lists, labels and more, with polling triggers",
 	"license": "MIT",
 	"homepage": "https://developers.niftypm.com",
@@ -37,6 +37,7 @@
 		"n8nNodesApiVersion": 1,
 		"strict": true,
 		"credentials": [
+			"dist/credentials/NiftyApi.credentials.js",
 			"dist/credentials/NiftyOAuth2Api.credentials.js"
 		],
 		"nodes": [

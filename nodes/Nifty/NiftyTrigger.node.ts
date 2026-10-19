@@ -3,7 +3,11 @@ import { NodeConnectionTypes } from 'n8n-workflow';
 import type { IDataObject, IHttpRequestMethods, ILoadOptionsFunctions, INodeExecutionData, INodePropertyOptions, INodeType, INodeTypeDescription, IPollFunctions } from 'n8n-workflow';
 
 const BASE_URL = 'https://openapi.niftypm.com/api/v3';
-const CREDENTIAL = 'niftyOAuth2Api';
+// The credential the `authentication` option picks.
+function credentialOf(context: IPollFunctions | ILoadOptionsFunctions): string {
+	return context.getNodeParameter('authentication', 'oAuth2') === 'apiKey' ? 'niftyApi' : 'niftyOAuth2Api';
+}
+
 // Ids remembered for the current event and filter so that a task is delivered once; bounded, newest first. A poll reads one page, so at most
 // one page of new items per poll is seen (the preset page size of the catalog trigger).
 const MAX_SEEN = 500;
@@ -76,7 +80,7 @@ interface Row {
 
 // Dropdown options of a choiceSource entry (one page: the preset limit).
 async function loadChoices(context: ILoadOptionsFunctions, path: string, qs: IDataObject, withProject: boolean): Promise<INodePropertyOptions[]> {
-	const response = (await context.helpers.httpRequestWithAuthentication.call(context, CREDENTIAL, {
+	const response = (await context.helpers.httpRequestWithAuthentication.call(context, credentialOf(context), {
 		method: 'GET',
 		url: `${BASE_URL}${path}`,
 		qs,
@@ -109,9 +113,43 @@ export class NiftyTrigger implements INodeType {
 			{
 				name: 'niftyOAuth2Api',
 				required: true,
+				displayOptions: {
+					show: {
+						authentication: [
+							'oAuth2',
+						],
+					},
+				},
+			},
+			{
+				name: 'niftyApi',
+				required: true,
+				displayOptions: {
+					show: {
+						authentication: [
+							'apiKey',
+						],
+					},
+				},
 			},
 		],
 		properties: [
+			{
+				displayName: 'Authentication',
+				name: 'authentication',
+				type: 'options',
+				options: [
+					{
+						name: 'OAuth2',
+						value: 'oAuth2',
+					},
+					{
+						name: 'API Key',
+						value: 'apiKey',
+					},
+				],
+				default: 'oAuth2',
+			},
 			{
 				displayName: 'Event',
 				name: 'event',
@@ -183,7 +221,7 @@ export class NiftyTrigger implements INodeType {
 		const key = `${event}:${JSON.stringify(Object.entries(qs).sort(([x], [y]) => (x < y ? -1 : x > y ? 1 : 0)))}`;
 		const previous = staticData.seen?.[key];
 
-		const response = (await this.helpers.httpRequestWithAuthentication.call(this, CREDENTIAL, {
+		const response = (await this.helpers.httpRequestWithAuthentication.call(this, credentialOf(this), {
 			method: spec.method,
 			url: `${BASE_URL}${spec.path}`,
 			qs,
